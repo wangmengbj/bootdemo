@@ -1,6 +1,7 @@
 package com.example.demo;
 
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -50,9 +51,18 @@ public class Example {
    }
    
    @RequestMapping("/submit")
-   public String submit(Model model){
-	   model.addAttribute("name",hello);
-	   return "index";
+   public String submit(HttpServletRequest arg0,Model model){
+	   String name = arg0.getParameter("name");	
+	   String password = arg0.getParameter("password");	
+	   User user = userRepository.userFind(name,password);
+	   if(user !=null){
+		   java.util.List<User> list = userRepository.findAll();
+		   model.addAttribute("list", list);
+		   return "userList";
+		   
+	   }else {
+		   return "submit";
+	   }
    }
    
    @RequestMapping("/findUser")
@@ -66,6 +76,7 @@ public class Example {
 	   String id = arg0.getParameter("id");
 	   String name = arg0.getParameter("name");	
 	   String age = arg0.getParameter("age");
+	   String address = arg0.getParameter("address");
 	   User user = new User();
 	   if("".equals(id)){
 		   String uuid = this.getUUID();
@@ -75,6 +86,7 @@ public class Example {
 	   }
 	   if(!"".equals(age)){user.setAge(Integer.parseInt(age));}
 	   user.setName(name);
+	   user.setAddress(address);
 	   userRepository.save(user);
 	   
 	   java.util.List<User> list = userRepository.findAll();
@@ -120,6 +132,13 @@ public class Example {
 	   User user = userRepository.findOne(id);
 	   model.addAttribute("user",user);
 	   return "addUser";
+   }
+   @RequestMapping("/search")
+   public String search(HttpServletRequest arg0,Model model){
+	   String search = arg0.getParameter("search");
+	   java.util.List<User> list = userRepository.search(search);
+	   model.addAttribute("list", list);
+	   return "userList";
    }
    public static String getUUID(){    
        String uuid = UUID.randomUUID().toString().trim().replaceAll("-", "");    

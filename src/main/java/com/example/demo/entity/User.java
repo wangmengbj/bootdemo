@@ -14,7 +14,8 @@ public class User {
     private Integer age;
     
     private String name;
-
+    
+    private String address;
     // 省略构造函数
    /* public User(){
     	super();
@@ -42,6 +43,12 @@ public class User {
 	}
 	public void setAge(Integer age) {
 		this.age = age;
+	}
+	public String getAddress() {
+		return address;
+	}
+	public void setAddress(String address) {
+		this.address = address;
 	}
     
     // 省略getter和setter

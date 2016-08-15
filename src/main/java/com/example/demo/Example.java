@@ -140,6 +140,7 @@ public class Example {
 	   model.addAttribute("list", list);
 	   return "userList";
    }
+   
    public static String getUUID(){    
        String uuid = UUID.randomUUID().toString().trim().replaceAll("-", "");    
        return uuid;    

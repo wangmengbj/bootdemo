@@ -37,7 +37,7 @@ public interface UserRepository extends JpaRepository<User, String>{
 	    @Query(value = "insert into user values(1,2,3)",nativeQuery = true)
 	    @Modifying
 	    public void insertUser(String id,int age,String name);*/
-		@Query(value = "select user from User user where name=?1 and password=?2")
+		@Query(value = "select * from user where name=?1 and password=?2",nativeQuery=true)
 		public User userFind(String name,String password);
 		@Query(value = "from User where name like :un")
 		public List search(@Param("un") String search);

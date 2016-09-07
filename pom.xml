@@ -69,6 +69,11 @@
            <artifactId>tomcat-embed-jasper</artifactId>
            <scope>provided</scope>
     </dependency>
+    <!-- redis依赖 -->
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-redis</artifactId>
+    </dependency>
   </dependencies>  
   <build>
  	<plugins>

@@ -1,17 +1,12 @@
 package com.example.demo;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import org.apache.log4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -20,19 +15,19 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.ModelAndView;
-
 import com.example.demo.dao.UserRepository;
 import com.example.demo.entity.User;
-import com.fasterxml.jackson.core.sym.Name;
-import com.fasterxml.jackson.databind.Module;
+import com.example.demo.service.DemoService;
 
 @Controller  
 public class Example {  
 	@Autowired  
     private UserRepository userRepository; 
+	@Autowired  
+    DemoService demoService; 
+	/*@Autowired  
+    private RedisUtil redisUtil; */
 	
 	// 从 application.properties 中读取配置，如取不到默认值为Hello Shanhy
     @Value("${application.hello:Hello Angel}")
@@ -66,9 +61,16 @@ public class Example {
    }
    
    @RequestMapping("/findUser")
+   //@Cacheable(value = "reportcache", keyGenerator = "wiselyKeyGenerator")
    public void findUser(){
-	 User user = userRepository.findOne("65e9bc7156f7454a9172157b4fab6317");
+	 User user = userRepository.findOne("24bd761571da41efb095c5f679e2f5f4");
 	 System.out.println(user+"||"+user.getName());
+   }
+   
+   @RequestMapping("/delUserCache")
+   //@CacheEvict(value="reportcache",key="reportcache")
+   public void delUserCache(){
+	   
    }
    
    @RequestMapping("/saveUser")
@@ -105,7 +107,9 @@ public class Example {
    }
    
    @RequestMapping("/userList")
+   @Cacheable(value = "userListCache", keyGenerator = "wiselyKeyGenerator")
    public String userList(HttpServletRequest arg0,Model model){
+	   System.out.println("没有从缓存取数据。。。");
 	   String pageStr = arg0.getParameter("page");
 	   int page = 0;
 	   if(!"".equals(pageStr) && pageStr !=null){
@@ -146,4 +150,23 @@ public class Example {
        return uuid;    
    }
    
+   @RequestMapping("/putCache")  
+   @ResponseBody  
+   public void putCache(){  
+	   String id = "24bd761571da41efb095c5f679e2f5f4";
+	   User user = demoService.findUser(id);  
+       //System.out.println("若下面没出现“无缓存的时候调用”字样且能打印出数据表示测试成功"+user.getName());  
+   }  
+   
+   @RequestMapping("/delAllCache")
+   @ResponseBody
+   public void delAllCache(){
+	   demoService.delAllCache();
+   }
+   
+   @RequestMapping("/delCache")
+   @ResponseBody
+   public void delCache(){
+	   demoService.delCache();
+   }
 }  

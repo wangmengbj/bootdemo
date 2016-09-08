@@ -16,7 +16,7 @@ public class DemoService {
 	@Autowired  
     private UserRepository userRepository; 
 	
-	@Cacheable(value = "usercache",keyGenerator = "wiselyKeyGenerator") 
+	@Cacheable(value = "usercache",key = "#id") 
     public User findUser(String id){  
 		User user = userRepository.findOne(id);
         System.out.println("无缓存的时候调用这里");  
@@ -27,8 +27,8 @@ public class DemoService {
 	      
 	}  
     
-	@CacheEvict(value="usercache",key="#com.example.demo.service.DemoServicefindUser24bd761571da41efb095c5f679e2f5f4")// 清空accountCache 缓存    
-	public void delCache() {  
+	@CacheEvict(value="usercache",key="#id")// 清空accountCache 缓存    
+	public void delCache(String id) {  
 		
 	}
 }  

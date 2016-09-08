@@ -167,6 +167,7 @@ public class Example {
    @RequestMapping("/delCache")
    @ResponseBody
    public void delCache(){
-	   demoService.delCache();
+	   String id = "24bd761571da41efb095c5f679e2f5f4";
+	   demoService.delCache(id);
    }
 }  

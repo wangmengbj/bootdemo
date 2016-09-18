@@ -41,4 +41,7 @@ public interface UserRepository extends JpaRepository<User, String>{
 		public User userFind(String name,String password);
 		@Query(value = "from User where name like :un")
 		public List search(@Param("un") String search);
+		@Query(value = "SELECT * FROM to_horizon_dept dd where dd.dept_state = 1 and dd.id in"
+				+ "( SELECT biz_id FROM tp_horizon_role WHERE biz_type = 'ORGOPER' AND object_id IN ( SELECT role_id FROM tpr_horizon_obj_role WHERE object_id = '%s' )) ORDER BY dd.order_no",nativeQuery=true)
+		public List getDeptTree();
 }

@@ -13,9 +13,9 @@ import ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy;
 
 public interface UserRepository extends JpaRepository<User, String>{
 	
-		/*User findByName(String name);
+		User findByName(String name);
 
-	    User findByNameAndAge(String name, Integer age);
+		/*User findByNameAndAge(String name, Integer age);
 
 	    @Query("from User u where u.name=:name")
 	    User findUser(@Param("name") String name);

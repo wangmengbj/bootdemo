@@ -15,6 +15,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import com.example.demo.dao.UserRepository;
 import com.example.demo.entity.User;
@@ -39,9 +40,18 @@ public class Example {
         return "Hello "+myName+"!!!";  
     } 
    
-   @RequestMapping("/login")
-   public String login(Model model){
-       //model.addAttribute("name","王猛");
+   @RequestMapping("/")
+   public String index() {
+       return "index";
+   }
+
+   @RequestMapping("/hello")
+   public String hello() {
+       return "hello";
+   }
+
+   @RequestMapping(value = "/login", method = RequestMethod.GET)
+   public String login() {
        return "login";
    }
    
@@ -107,9 +117,9 @@ public class Example {
    }
    
    @RequestMapping("/userList")
-   @Cacheable(value = "userListCache", keyGenerator = "wiselyKeyGenerator")
+   //@Cacheable(value = "userListCache", keyGenerator = "wiselyKeyGenerator")
    public String userList(HttpServletRequest arg0,Model model){
-	   System.out.println("没有从缓存取数据。。。");
+	   //System.out.println("没有从缓存取数据。。。");
 	   String pageStr = arg0.getParameter("page");
 	   int page = 0;
 	   if(!"".equals(pageStr) && pageStr !=null){

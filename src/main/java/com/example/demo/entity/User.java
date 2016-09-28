@@ -16,9 +16,17 @@ public class User{
     private String name;
     @Column
     private String address;
+    @Column
+    private String password;
     @ManyToMany(cascade={CascadeType.REFRESH},fetch=FetchType.EAGER)
     private List<Role> roles;
     
+	public String getPassword() {
+		return password;
+	}
+	public void setPassword(String password) {
+		this.password = password;
+	}
 	public String getId() {
 		return id;
 	}

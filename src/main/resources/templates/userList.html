@@ -14,17 +14,19 @@
 </head>
 <body>
 <form id="list" name="list" action="http://localhost:8011/bootdemo/search">
+<input id="pageStr" name="pageStr" type="hidden" value=""/>
 <div class="panel panel-primary">
 	<div class="panel-heading">
 		<h3 class="panel-title">列表</h3>
 	</div>
-	<div class="panel-body">
+	<div class="panel-body" sec:authorize="hasRole('admin')">
 	<a th:href="@{http://localhost:8011/bootdemo/addUser}">添加</a><input id="search" name="search"/><a href="javascript:search()">查询</a>
 		<ul class="list-group">
 			<li class="list-group-item" th:each="user:${list}">
 			    <span th:text="${user.name}"></span>
 				<span th:text="${user.age}"></span>
 				<span th:text="${user.address}"></span>
+				<span th:text="${user.password}"></span>
 				<a th:href="@{http://localhost:8011/bootdemo/delUser(id=${user.id})}" onclick="">删除</a>
 				<a th:href="@{http://localhost:8011/bootdemo/editUser(id=${user.id})}" onclick="">编辑</a>
 			</li>
@@ -41,6 +43,9 @@
 	</div>
 </div>
 </form>
+<form th:action="@{/logout}" method="post">
+            <input type="submit" value="注销"/>
+        </form>
 <script th:src="@{jquery-1.10.2.min.js}" type="text/javascript"></script>
 <script th:src="@{bootstrap/js/bootstrap.min.js}"></script>
 <script>

@@ -1,8 +1,11 @@
 package com.example.demo.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.dao.UserRepository;
@@ -31,4 +34,15 @@ public class DemoService{
 	public void delCache(String id) {  
 		
 	}
+	@Cacheable(value = "usercache", keyGenerator = "wiselyKeyGenerator")
+	public Object userList(Object list){
+		return list;
+	}
+	@Cacheable(value="usercache",key="#id")
+	public User findOne(String id){
+		 System.out.println("从数据库取的数据。。。");
+		User user = userRepository.findOne(id);
+		return user;
+	}
+		
 }  

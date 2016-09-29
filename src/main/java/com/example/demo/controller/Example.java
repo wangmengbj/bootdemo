@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import java.util.List;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
@@ -27,12 +28,9 @@ public class Example {
     private UserRepository userRepository; 
 	@Autowired  
     DemoService demoService; 
-	/*@Autowired  
-    private RedisUtil redisUtil; */
 	
 	// 从 application.properties 中读取配置，如取不到默认值为Hello Shanhy
     @Value("${application.hello:Hello Angel}")
-
     private String hello;
       
     @RequestMapping("/hello/{myName}")  
@@ -59,9 +57,11 @@ public class Example {
    public String submit(HttpServletRequest arg0,Model model){
 	   String name = arg0.getParameter("name");	
 	   String password = arg0.getParameter("password");	
+	   String pageStr = arg0.getParameter("pageStr");	
 	   User user = userRepository.userFind(name,password);
+	   Pageable pageable = this.getPageInfo(pageStr);
 	   if(user !=null){
-		   java.util.List<User> list = userRepository.findAll();
+		   Object list = userRepository.findAll(pageable);
 		   model.addAttribute("list", list);
 		   return "userList";
 		   
@@ -89,6 +89,8 @@ public class Example {
 	   String name = arg0.getParameter("name");	
 	   String age = arg0.getParameter("age");
 	   String address = arg0.getParameter("address");
+	   String password = arg0.getParameter("password");
+	   String pageStr = arg0.getParameter("pageStr");
 	   User user = new User();
 	   if("".equals(id)){
 		   String uuid = this.getUUID();
@@ -99,9 +101,10 @@ public class Example {
 	   if(!"".equals(age)){user.setAge(Integer.parseInt(age));}
 	   user.setName(name);
 	   user.setAddress(address);
+	   user.setPassword(password);
 	   userRepository.save(user);
-	   
-	   java.util.List<User> list = userRepository.findAll();
+	   Pageable pageable = this.getPageInfo(pageStr);
+	   Object list = userRepository.findAll(pageable);
 	   model.addAttribute("list", list);
 	   return "userList";
    }                    
@@ -110,27 +113,21 @@ public class Example {
    public String delUser(HttpServletRequest arg0,HttpServletResponse arg1,Model model){
 	   //String id = (String) arg0.getAttribute("id");
 	   String id = arg0.getParameter("id");
+	   String pageStr = arg0.getParameter("pageStr");
 	   userRepository.delete(id);
-	   java.util.List<User> list = userRepository.findAll();
+	   Pageable pageable = this.getPageInfo(pageStr);
+	   Object list = userRepository.findAll(pageable);
 	   model.addAttribute("list", list);
 	   return"userList";
    }
    
    @RequestMapping("/userList")
-   //@Cacheable(value = "userListCache", keyGenerator = "wiselyKeyGenerator")
+   //@Cacheable(value = "usercache", keyGenerator = "wiselyKeyGenerator")
    public String userList(HttpServletRequest arg0,Model model){
-	   //System.out.println("没有从缓存取数据。。。");
 	   String pageStr = arg0.getParameter("page");
-	   int page = 0;
-	   if(!"".equals(pageStr) && pageStr !=null){
-		   page = Integer.parseInt(pageStr)-1;
-	   }
-	   //int page = 0;
-	   int pageSize = 3;
-	   Sort sort = new Sort(Direction.DESC, "id");
-	   Pageable pageable = new PageRequest(page, pageSize,sort);
+	   Pageable pageable = this.getPageInfo(pageStr);
 	   Object list = userRepository.findAll(pageable);
-	   
+	   //demoService.userList(list);
 	   model.addAttribute("list", list);
 	   return "userList";
    }
@@ -143,7 +140,8 @@ public class Example {
    @RequestMapping("/editUser")
    public String editUser(HttpServletRequest arg0,HttpServletResponse arg1,Model model){
 	   String id = arg0.getParameter("id");
-	   User user = userRepository.findOne(id);
+	   //User user = userRepository.findOne(id);
+	   User user = demoService.findOne(id);
 	   model.addAttribute("user",user);
 	   return "addUser";
    }
@@ -163,7 +161,7 @@ public class Example {
    @RequestMapping("/putCache")  
    @ResponseBody  
    public void putCache(){  
-	   String id = "24bd761571da41efb095c5f679e2f5f4";
+	   String id = "6c89dbbeeae74336a92160e0aa346633";
 	   User user = demoService.findUser(id);  
        //System.out.println("若下面没出现“无缓存的时候调用”字样且能打印出数据表示测试成功"+user.getName());  
    }  
@@ -177,7 +175,18 @@ public class Example {
    @RequestMapping("/delCache")
    @ResponseBody
    public void delCache(){
-	   String id = "24bd761571da41efb095c5f679e2f5f4";
+	   String id = "6c89dbbeeae74336a92160e0aa346633";
 	   demoService.delCache(id);
+   }
+   
+   private Pageable getPageInfo(String pageStr){
+	   int page=0;
+	   if(!"".equals(pageStr) && pageStr !=null){
+		   page = Integer.parseInt(pageStr)-1;
+	   }
+	   int pageSize = 5;
+	   Sort sort = new Sort(Direction.DESC, "id");
+	   Pageable pageable = new PageRequest(page, pageSize,sort);
+	   return pageable;
    }
 }  

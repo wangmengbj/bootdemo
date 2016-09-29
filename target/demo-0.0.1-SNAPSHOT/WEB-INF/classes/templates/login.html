@@ -4,13 +4,13 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 </head>
 <body>
-<form id="form" action="http://localhost:8080/submit">
+<form id="form" name="form" action="http://localhost:8011/bootdemo/submit">
 <table>
 <tr>
-<td style="text-align: right;">用户名：<input type="text" id="name"/></td>
+<td style="text-align: right;">用户名：<input type="text" id="name" name="name"/></td>
 </tr>
 <tr>
-<td style="text-align: right;">密码：<input type="text" id="password"/></td>
+<td style="text-align: right;">密码：<input type="text" id="password" name="password"/></td>
 </tr>
 <tr>
 <td style="text-align: right;"><input type="button" value="提交" onclick="login();"/></td>
@@ -22,20 +22,20 @@
 function login(){
 	var name = $("#name").val();
 	var password = $("#password").val();
-	if(name+""+password == "王猛111111"){
+	$('#form').submit();
+	/* if(name+""+password == "王猛111111"){
 		$('#form').submit();
 	}else{
 		alert("账号或密码错误，请重新输入");
-	}
-	/* var gcPath =window.location.href;
-	var dqymPath = window.location.pathname;
-	var path = gcPath.substring(0,gcPath.indexOf(dqymPath));
-	$.ajax({
-		type:"post",
-		url:path+"submit", 
-		success:function(data){
-			
-		}
+	} */
+	/* $.ajax({ 
+		url:'http://localhost:8011/bootdemo/submit', 
+		type:'post', //数据发送方式 
+		dataType:'json', //接受数据格式 (这里有很多,常用的有html,xml,js,json) 
+		data:{name:name,password:password}, //要传递的数据 
+		success: function(data){ //成功 
+			alert("11"); 
+		} 
 	}); */
 }
 </script>

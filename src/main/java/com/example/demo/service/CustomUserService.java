@@ -18,12 +18,15 @@ public class CustomUserService implements UserDetailsService{
 	UserRepository userRepository;
 
 	@Override
-	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+	public UserDetails loadUserByUsername(String username){
 		User user = userRepository.findByName(username);
-		List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
+		/*List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
 		authorities.add(new SimpleGrantedAuthority("USER"));
-		return new org.springframework.security.core.userdetails.User(user.getName(),user.getPassword(),authorities);
+		return new org.springframework.security.core.userdetails.User(user.getName(),user.getPassword(),authorities);*/
+		if(user == null){
+			throw new UsernameNotFoundException("用户名不存在");
+		}
+		return user;
 	}
-	
 	
 }

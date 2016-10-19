@@ -13,14 +13,23 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import com.example.demo.service.CustomUserService;
 
 @Configuration
-@EnableWebSecurity
+//@EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
+	@Bean
+	UserDetailsService customUserService(){
+		return new CustomUserService();
+	}
+	@Override
+	protected void configure(AuthenticationManagerBuilder auth)throws Exception{
+		auth.userDetailsService(customUserService());
+	} 
+	
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
             .authorizeRequests()
-                .antMatchers().permitAll()
+                //.antMatchers().permitAll()
                 .anyRequest().authenticated()
                 .and()
             .formLogin()
@@ -32,18 +41,4 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .permitAll();
     }
 
-    /*@Autowired
-    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-        auth
-            .inMemoryAuthentication()
-                .withUser("user").password("password").roles("USER");
-    }*/
-	@Bean
-	UserDetailsService customUserService(){
-		return new CustomUserService();
-	}
-	@Override
-	protected void configure(AuthenticationManagerBuilder auth)throws Exception{
-		auth.userDetailsService(customUserService());
-	} 
 }

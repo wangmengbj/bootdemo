@@ -1,14 +1,20 @@
 package com.example.demo.entity;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import javax.persistence.*;
 
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
 @Entity
-public class User{
+public class User implements UserDetails{
 
     @Id
-    //@GeneratedValue
+    @GeneratedValue
     private String id;
     @Column
     private Integer age;
@@ -56,6 +62,40 @@ public class User{
 	}
 	public void setRoles(List<Role> roles) {
 		this.roles = roles;
+	}
+	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		List <GrantedAuthority> auths = new ArrayList<GrantedAuthority>();
+		List<Role> roles = this.getRoles();
+		for(Role role:roles){
+			auths.add(new SimpleGrantedAuthority(role.getName()));
+		}
+		return auths;
+	}
+	@Override
+	public String getUsername() {
+	
+		return name;
+	}
+	@Override
+	public boolean isAccountNonExpired() {
+		// TODO Auto-generated method stub
+		return true;
+	}
+	@Override
+	public boolean isAccountNonLocked() {
+		// TODO Auto-generated method stub
+		return true;
+	}
+	@Override
+	public boolean isCredentialsNonExpired() {
+		// TODO Auto-generated method stub
+		return true;
+	}
+	@Override
+	public boolean isEnabled() {
+		// TODO Auto-generated method stub
+		return true;
 	}
     
 }

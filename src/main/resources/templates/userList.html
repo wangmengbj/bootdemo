@@ -1,8 +1,9 @@
 <!DOCTYPE HTML>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 <head>
-    <title>Getting Started: Serving Web Content</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<title sec:authentication="name"></title> 
     <link th:href="@{bootstrap/css/bootstrap.min.css}" rel="stylesheet"/>
     <link th:href="@{bootstrap/css/bootstrap-theme.min.css}" rel="stylesheet"/>
     <style type="text/css">
@@ -19,7 +20,7 @@
 	<div class="panel-heading">
 		<h3 class="panel-title">列表</h3>
 	</div>
-	<div class="panel-body" sec:authorize="hasRole('admin')">
+	<div class="panel-body" >
 	<a th:href="@{http://localhost:8011/bootdemo/addUser}">添加</a><input id="search" name="search"/><a href="javascript:search()">查询</a>
 		<ul class="list-group">
 			<li class="list-group-item" th:each="user:${list}">
@@ -27,7 +28,7 @@
 				<span th:text="${user.age}"></span>
 				<span th:text="${user.address}"></span>
 				<span th:text="${user.password}"></span>
-				<a th:href="@{http://localhost:8011/bootdemo/delUser(id=${user.id})}" onclick="">删除</a>
+				<a th:href="@{http://localhost:8011/bootdemo/delUser(id=${user.id})}" onclick="" sec:authorize="hasRole('ROLE_ADMIN')">删除</a>
 				<a th:href="@{http://localhost:8011/bootdemo/editUser(id=${user.id})}" onclick="">编辑</a>
 			</li>
 		</ul>

@@ -93,7 +93,7 @@ public class Example {
 	   String pageStr = arg0.getParameter("pageStr");
 	   User user = new User();
 	   if("".equals(id)){
-		   String uuid = this.getUUID();
+		   String uuid = "user11";
 		   user.setId(uuid);
 	   }else {
 		   user.setId(id);
@@ -140,8 +140,8 @@ public class Example {
    @RequestMapping("/editUser")
    public String editUser(HttpServletRequest arg0,HttpServletResponse arg1,Model model){
 	   String id = arg0.getParameter("id");
-	   //User user = userRepository.findOne(id);
-	   User user = demoService.findOne(id);
+	   User user = userRepository.findOne(id);
+	   //User user = demoService.findOne(id);
 	   model.addAttribute("user",user);
 	   return "addUser";
    }

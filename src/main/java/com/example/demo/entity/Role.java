@@ -8,7 +8,7 @@ import javax.persistence.Id;
 @Entity
 public class Role {
 @Id
-@GeneratedValue
+//@GeneratedValue
 private String id;
 @Column
 private String name;

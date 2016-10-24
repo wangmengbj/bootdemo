@@ -93,7 +93,7 @@ public class Demo {
 		String pageStr = arg0.getParameter("pageStr");
 		User user = new User();
 		if ("".equals(id)) {
-			String uuid = "user11";
+			String uuid = this.getUUID();
 			user.setId(uuid);
 		} else {
 			user.setId(id);
